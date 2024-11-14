@@ -1,24 +1,22 @@
 <?php
-// Konvertatsiya qilish funksiyasi
+
 function convertCurrency($amount, $from_currency, $to_currency) {
-    // Valyuta kurslarini olish uchun API so'rovi
     $url = "https://api.exchangerate-api.com/v4/latest/$from_currency";
     $json = file_get_contents($url);
     $exchangeRates = json_decode($json, true);
 
-    // Agar valyuta mavjud bo'lmasa, xatolik chiqaradi
+ 
     if (!isset($exchangeRates['rates'][$to_currency])) {
         return "Xato: Valyuta topilmadi!";
     }
 
-    // Konvertatsiya qilish
+
     $rate = $exchangeRates['rates'][$to_currency];
     $convertedAmount = $amount * $rate;
 
     return round($convertedAmount, 2);
 }
 
-// Foydalanuvchi forma yuborgan bo'lsa, konvertatsiyani amalga oshiradi
 $result = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $amount = $_POST['amount'];
